@@ -43,9 +43,9 @@ async function printCollection(client, fieldValue) {
     .db("newDB")
     .collection("info")
     .findOne({ name: fieldValue });
-  result
-    ? console.log(result)
-    : console.log("I am sorry there was no matching value");
+  let text = "";
+  result ? (text = result) : (text = "I am sorry there was no matching value");
+  console.log(text);
 }
 
 // CRUD => Create, read, update and delete
