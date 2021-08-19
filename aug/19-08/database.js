@@ -13,9 +13,9 @@ async function main() {
     .connect()
     //  second step
     // doing whatever we want after connecting
-    .then(console.log("The connection was successful!"))
+    .then(console.log("The connection with the database was successful!"))
     // .then(await listDatabases(client))
-    .then(await printCollection(client))
+    .then(await printCollection(client, "Viviane"))
     // last step
     .catch((err) => console.log(err));
 }
@@ -38,10 +38,16 @@ async function listDatabases(client) {
   //   console.log(databases);
 }
 
-async function printCollection(client) {
-  const result = await client.db("newDB").collection("info").find({});
-  console.log(result);
+async function printCollection(client, fieldValue) {
+  const result = await client
+    .db("newDB")
+    .collection("info")
+    .findOne({ name: fieldValue });
+  result
+    ? console.log(result)
+    : console.log("I am sorry there was no matching value");
 }
+
 // CRUD => Create, read, update and delete
 // Create => insertOne(), insertMany()
 // Update =>
