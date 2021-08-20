@@ -15,11 +15,49 @@ async function main() {
     // doing whatever we want after connecting
     .then(console.log("The connection with the database was successful!"))
     // .then(await listDatabases(client))
-    .then(await printCollection(client, "Viviane"))
+    // .then(await printCollection(client, "Sergio"))
+    .then(
+      await writingToDB(client, [
+        {
+          name: "Banana Cruise",
+          add: {
+            Street: "Whatever Street",
+            Number: 25,
+          },
+        },
+        {
+          name: "Tom Cruise",
+          add: {
+            Street: "Hall of fame Street",
+            Number: 45,
+          },
+        },
+      ])
+    )
     // last step
     .catch((err) => console.log(err));
+  await client.close();
 }
 main();
+
+// CRUD => Create, read, update and delete
+// Create => insertOne(), insertMany()
+// Read => client.db(<database name>).admin().listDatabases(), findOne(returns a object), find(returns a promise we need to use the .toArray())
+// Update =>
+
+// Writing to the database
+
+// insertOne() and insertMany()
+async function writingToDB(client, valueToInsert) {
+  const newDocument = await client
+    .db("newDB")
+    .collection("info")
+    // .insertOne(valueToInsert);
+    .insertMany(valueToInsert);
+  console.log(`New document created with the id: ${newDocument.insertedId}`);
+}
+
+// Reading from database
 
 // print on the console all the databases
 async function listDatabases(client) {
@@ -37,7 +75,6 @@ async function listDatabases(client) {
   //   console.log(databases);
   //   console.log(databases);
 }
-
 async function printCollection(client, fieldValue) {
   const result = await client
     .db("newDB")
@@ -45,9 +82,6 @@ async function printCollection(client, fieldValue) {
     .findOne({ name: fieldValue });
   let text = "";
   result ? (text = result) : (text = "I am sorry there was no matching value");
+  // result ? result : (result = "Sorry there was a problem");
   console.log(text);
 }
-
-// CRUD => Create, read, update and delete
-// Create => insertOne(), insertMany()
-// Update =>
