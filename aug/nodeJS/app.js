@@ -1,8 +1,10 @@
-// Importing from module.exports
+/*
+Built-in Modules
 
-const sayHi = require("./util.js");
-// const names = require("./names.js");
-const { john, peter } = require("./names.js");
+OS
+PATH
+FS
+HTTP
 
-sayHi(john);
-sayHi(peter);
+Further documentation on the modules that Node.js offers: https://nodejs.org/dist/latest-v14.x/docs/api/
+*/
