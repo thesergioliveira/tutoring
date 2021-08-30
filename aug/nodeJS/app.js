@@ -1,3 +1,33 @@
+// Browser environment (vanilla Javascript, frameworks)
+// Module (ES6)
+// Local Storage
+// DOM - Selectors | Windown(events)
+//Virtual DOM React - Hooks
+
+// Nodejs (v8 engine) - CommonJS
+// Brave, Edge
+// CLI (command line interface -terminal )
+
+// __dirname - file name
+// file System
+const { readFileSync, writeFileSync } = require("fs");
+const data = readFileSync("./content/text.txt", { encoding: "UTF8" });
+console.log(data);
+
+// Desktop (Electron)
+// os
+const os = require("os");
+const user = os.userInfo();
+const currentOs = {
+  name: os.type(),
+  release: os.release(),
+  totalMen: os.totalmem(),
+  freeMen: os.freemem(),
+};
+console.table(currentOs);
+// Server application
+// http
+
 const names = require("./name.js");
 // file system
 // Try and Catch - Handling errors.
