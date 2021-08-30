@@ -4,6 +4,6 @@ const server = http.createServer((req, res) => {
   res.end();
 });
 
-server.listen(8080, () => {
+server.listen(8080, (req) => {
   console.log("The server is online");
 });
