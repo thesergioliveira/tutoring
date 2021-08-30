@@ -1,9 +1,16 @@
 const http = require("http");
+
 const server = http.createServer((req, res) => {
-  res.write("welcome to our home page");
-  res.end();
+  if (req.url === "/") {
+    res.end("welcome to our home page!");
+  }
+  if (req.ulr === "/about") {
+    res.end("here is a short history");
+  }
+  res.end(
+    "<h1> Oops! <h1> <p> We can't seem to find the page you are looking for </p> <a href=" /
+      "> back home</a>"
+  );
 });
 
-server.listen(8080, (req) => {
-  console.log("The server is online");
-});
+server.listen(8800);
