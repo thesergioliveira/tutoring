@@ -66,6 +66,11 @@ mongoose
     console.log(`There was and error: ${err.message}`);
   });
 
+// Setting routes
+// import userRoute
+const userRoute = require("./routes/userRoute");
+app.use("/user", userRoute);
+
 app.get("/home", (req, res) => {
   res.render("index", {
     title: "validation app",
