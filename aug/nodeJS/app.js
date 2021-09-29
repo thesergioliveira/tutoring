@@ -45,6 +45,10 @@ require("./function.js");
 readFile("./content/test.txt", "utf8", (err, result) => {
   if (err) {
     console.log(`This is the err: ${err}`);
+  }
+  
+  console.log(result);
+  );
 /*
 Built-in Modules
 
