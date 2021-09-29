@@ -66,13 +66,6 @@ mongoose
     console.log(`There was and error: ${err.message}`);
   });
 
-// Setting up routes
-const userRoute = require("./routes/userRoute");
-app.use("/user", userRoute);
-
-const authorRoute = require("./routes/authorRoute");
-app.use("/author", authorRoute);
-
 app.get("/home", (req, res) => {
   res.render("index", {
     title: "validation app",
@@ -86,46 +79,5 @@ app.get("/about", (req, res) => {
     data: "This is our history 😊",
   });
 });
-
-app.post(
-  "/submit",
-  // req.body
-  // req.body
-  body("email", "Please right a valid email").isEmail(),
-  // if any of these function return true it will execute next()
-  // isMobile
-  // isEmail
-  // isPostalCode
-  // isCurrency
-  // isCreditCard
-  body("pass", "Invalid password").isLength({ min: 5 }),
-  body("passConf").custom((value, { req }) => {
-    if (value != req.body.pass) {
-      throw new Error("Password conf is not the same");
-    }
-    return true;
-  }),
-  (req, res) => {
-    // req has for data
-    // req.body.email
-    const errors = validationResult(req);
-    console.log(errors);
-    if (!errors.isEmpty()) {
-      res.render("validation", {
-        title: "check your info",
-        errors: errors.array(),
-      });
-    } else {
-      res.render("validation", {
-        title: "Your information will be registered!",
-        done: true,
-      });
-    }
-    app.render("index", {
-      title: "validation app",
-      done: true,
-    });
-  }
-);
 
 module.exports = app;
