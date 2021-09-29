@@ -1,0 +1,67 @@
+<h1>{{title}}</h1>
+{{#if done}}
+  <div>
+    <h4><a href="/user/logout">Logout</a></h4>
+  </div>
+{{else if toLogin}}
+  <form method="POST" action="/user/login">
+    <label for="username">username
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="Enter your username"
+      /></label>
+
+    <label for="password">password
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Your password"
+      /></label>
+
+    <label for="submit">
+      <input type="submit" id="submit" value="login" />
+    </label>
+  </form>
+  <p>Or</p>
+  <h2><a href="/user/register">Register</a></h2>
+
+{{else if errors}}
+  <div>
+    <ul>
+      {{#each errors}}
+        {{! errors.map(err => err aka this)}}
+        <li>{{this.msg}}</li>
+      {{/each}}
+    </ul>
+  </div>
+{{else}}
+  <form method="POST" action="/user/register">
+    <label for="username">
+      Username
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="Enter your username"
+      />
+    </label>
+
+    <label for="password">
+      Password
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Your password"
+      />
+    </label>
+    {{! <label for="avatar"><input type="file" name="avatar" id="avatar" /></label> }}
+    <label for="submit">
+      <input type="submit" value="register" />
+    </label>
+  </form>
+
+{{/if}}
