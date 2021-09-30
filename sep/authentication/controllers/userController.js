@@ -5,6 +5,8 @@ const Session = require("../model/sessionModel");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
+const user = require("../model/userModel");
+const session = require("express-session");
 
 // Initializing controller object
 const userController = {};
@@ -39,6 +41,65 @@ userController.addNewUser = async (req, res) => {
   }
 };
 
-userController.login = () => {};
+userController.login = async (req, res) => {
+  // step 1 - retrieve the data from the form, find the user in our DB
+  let username = req.body.username;
+  let password = req.body.password;
+
+  const user = await User.findOne({ username: username });
+  if (user == null) {
+    return res.status(404).render("errors", {
+      error: "User not found!",
+    });
+  }
+  // step 2 - Compare password
+  try {
+    if (await bcrypt.compare(password, user.password)) {
+      let sessionId = uuid();
+      // Initialize Cookies = cookies.user.role | cookies.Session_Id | cookies.user._Id
+      res.cookie("role", user.role, {
+        expires: new Date(Date.now() + 500000),
+      });
+      res.cookie("user_Id", user.user_Id, {
+        expires: new Date(date.now() + 500000),
+      });
+      res.cookie("session_Id", sessionId, {
+        expires: new Date(date.now() + 500000),
+      });
+      let newSession = await new Session({
+        uuid: sessionId,
+        user_id: user,
+      });
+      newSession.save();
+    } else {
+      res.render("errors", {
+        error: "Incorrect Password!",
+      });
+    }
+  } catch (err) {
+    res.render("errors", {
+      error: err.message,
+    });
+  }
+};
+
+userController.logout = async (req, res) => {
+  if (req.cookies && req.cookies.session_id) {
+    res.ClearCookie("session_Id");
+    res.ClearCookie("role");
+    res.ClearCookie("user_Id");
+  }
+};
+
+userController.displayLogin = async (req, res) => {
+  res.render("validation", {
+    title: "Login",
+    done: false,
+    toLogin: true,
+    errors: false,
+  });
+};
 
 userController.logout = () => {};
+
+module.exports = userController;

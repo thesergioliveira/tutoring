@@ -7,7 +7,10 @@ const userMiddleware = require("../middleware/userMiddleware");
 // route 1: GET,POST, /user/login
 // route 2: GET,POST. /user/register
 router.route("/").get();
-router.route("/login").get().post();
+router
+  .route("/login")
+  .get(userController.displayLogin)
+  .post(userController.login);
 router.route("/register").get().post();
 
 module.exports = router;
