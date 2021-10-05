@@ -14,6 +14,7 @@ app.use(morgan("dev"));
 const hbs = require("express-handlebars");
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
+console.log(path.join(__dirname, "views"));
 app.engine(
   "hbs",
   hbs({

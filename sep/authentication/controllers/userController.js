@@ -4,10 +4,9 @@ const User = require("../model/userModel");
 const Session = require("../model/sessionModel");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const uuid = require("uuid");
-const user = require("../model/userModel");
-const session = require("express-session");
-
+// const uuid = require("uuid");
+const expressSession = require("express-session");
+const uuid = require("uuid").v4;
 // Initializing controller object
 const userController = {};
 
@@ -27,13 +26,13 @@ userController.addNewUser = async (req, res) => {
     const newUser = await new User({
       _id: mongoose.Types.ObjectId(),
       username: req.body.username,
-      password: req.body.password,
+      password: hashedPassword,
       role: req.body.role || "User",
     });
     await newUser.save();
     // step4
     // redirecting/ render some content
-    res.status(201).redirect("user/login");
+    res.status(201).redirect("/user/login");
   } catch (err) {
     res.status(err.status).render("errors", {
       error: err.message,
@@ -52,25 +51,35 @@ userController.login = async (req, res) => {
       error: "User not found!",
     });
   }
+  console.log(
+    "This is the form password =>",
+    password,
+    "This is the user.password=>",
+    user.password
+  );
   // step 2 - Compare password
   try {
     if (await bcrypt.compare(password, user.password)) {
       let sessionId = uuid();
+      console.log("This is my session =>", sessionId);
       // Initialize Cookies = cookies.user.role | cookies.Session_Id | cookies.user._Id
       res.cookie("role", user.role, {
         expires: new Date(Date.now() + 500000),
       });
       res.cookie("user_Id", user.user_Id, {
-        expires: new Date(date.now() + 500000),
+        expires: new Date(Date.now() + 500000),
       });
       res.cookie("session_Id", sessionId, {
-        expires: new Date(date.now() + 500000),
+        expires: new Date(Date.now() + 500000),
       });
       let newSession = await new Session({
         uuid: sessionId,
         user_id: user,
       });
       newSession.save();
+      res.status(200).render("welcome", {
+        user: user.username,
+      });
     } else {
       res.render("errors", {
         error: "Incorrect Password!",
@@ -84,15 +93,16 @@ userController.login = async (req, res) => {
 };
 
 userController.logout = async (req, res) => {
-  if (req.cookies && req.cookies.session_id) {
-    res.ClearCookie("session_Id");
-    res.ClearCookie("role");
-    res.ClearCookie("user_Id");
+  if (req.cookies.session_Id) {
+    res.clearCookie("session_Id");
+    res.clearCookie("role");
+    res.clearCookie("user_Id");
   }
+  res.status(200).redirect("/home");
 };
 
 userController.displayLogin = async (req, res) => {
-  res.render("validation", {
+  res.status(200).render("validation", {
     title: "Login",
     done: false,
     toLogin: true,
@@ -100,6 +110,13 @@ userController.displayLogin = async (req, res) => {
   });
 };
 
-userController.logout = () => {};
+userController.displayRegister = (req, res) => {
+  res.render("validation", {
+    title: "Register",
+    toLogin: false,
+    error: false,
+    done: false,
+  });
+};
 
 module.exports = userController;
